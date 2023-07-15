@@ -55,17 +55,23 @@ Client.on('messageCreate', async (message) => {
     let rank;
     let role;
     const regexRank = /^[\w\s]+#[A-Za-z0-9]+$/;
-    let value = true;
+    let correctValue = true;
+
+    const idChannel = '1127772777127084032';
+
+    if ( message.channel.id === idChannel) {
+        console.log('Vous êtes dans le bon');
+    }
 
     if(message.content === "") {
-        value = false;
+        correctValue = false;
     }
 
     if (!regexRank.test(message.content)){
-        value = false;
+        correctValue = false;
     }
 
-    if (value){
+    if (correctValue ){
 
         let username = message.content.split("#")[0];
         let tag = message.content.split("#")[1];

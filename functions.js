@@ -2,8 +2,6 @@ function initRole(list, server) {
 
     list.forEach(roleData => {
 
-        console.log(roleData.name)
-
         server.roles.create({
             name: roleData.name,
             color: roleData.color,
