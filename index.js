@@ -2,6 +2,8 @@ const Discord = require('discord.js');
 const axios = require('axios');
 const { GatewayIntentBits } = require('discord.js');
 const config = require('./config.json');
+const { initRole } = require('./functions');
+const command = require('./commands');
 
 const Client = new Discord.Client({ partials: ["CHANNEL"], intents: [
         GatewayIntentBits.DirectMessages,
@@ -11,53 +13,41 @@ const Client = new Discord.Client({ partials: ["CHANNEL"], intents: [
         GatewayIntentBits.MessageContent,
     ]});
 
+const defaultRole = [
+    { name: 'Iron 1', color: '#8d8d8d' },
+    { name: 'Iron 2', color: '#8d8d8d' },
+    { name: 'Iron 3', color: '#8d8d8d' },
+    { name: 'Silver 1', color: '#646363' },
+    { name: 'Silver 2', color: '#646363' },
+    { name: 'Silver 3', color: '#646363' },
+    { name: 'Gold 1', color: '#bea614' },
+    { name: 'Gold 2', color: '#bea614' },
+    { name: 'Gold 3', color: '#bea614' },
+    { name: 'Platinum 1', color: '#2e5b97' },
+    { name: 'Platinum 2', color: '#2e5b97' },
+    { name: 'Platinum 3', color: '#2e5b97' },
+    { name: 'Diamond 1', color: '#833a8b' },
+    { name: 'Diamond 2', color: '#833a8b' },
+    { name: 'Diamond 3', color: '#833a8b' },
+    { name: 'Ascendant 1', color: '#33803b' },
+    { name: 'Ascendant 2', color: '#33803b' },
+    { name: 'Ascendant 3', color: '#33803b' },
+    { name: 'Immortal 1', color: '#a01f1f' },
+    { name: 'Immortal 2', color: '#a01f1f' },
+    { name: 'Immortal 3', color: '#a01f1f' },
+    { name: 'Radiant', color: '#ac7303' },
+];
 
-Client.on('ready', (serverguild) => {
+
+Client.on('ready', () => {
     console.log('Bot connecté');
 });
 
 
-const defaultRole = [
-     { name: 'Iron 1', color: '#8d8d8d' },
-     { name: 'Iron 2', color: '#8d8d8d' },
-     { name: 'Iron 3', color: '#8d8d8d' },
-     { name: 'Silver 1', color: '#646363' },
-     { name: 'Silver 2', color: '#646363' },
-     { name: 'Silver 3', color: '#646363' },
-     { name: 'Gold 1', color: '#bea614' },
-     { name: 'Gold 2', color: '#bea614' },
-     { name: 'Gold 3', color: '#bea614' },
-     { name: 'Platinum 1', color: '#2e5b97' },
-     { name: 'Platinum 2', color: '#2e5b97' },
-     { name: 'Platinum 3', color: '#2e5b97' },
-     { name: 'Diamond 1', color: '#833a8b' },
-     { name: 'Diamond 2', color: '#833a8b' },
-     { name: 'Diamond 3', color: '#833a8b' },
-     { name: 'Ascendant 1', color: '#33803b' },
-     { name: 'Ascendant 2', color: '#33803b' },
-     { name: 'Ascendant 3', color: '#33803b' },
-     { name: 'Immortal 1', color: '#a01f1f' },
-     { name: 'Immortal 2', color: '#a01f1f' },
-     { name: 'Immortal 3', color: '#a01f1f' },
-     { name: 'Radiant', color: '#ac7303' },
-];
-
-
 Client.on('guildCreate', (server) => {
 
-    defaultRole.forEach(roleData => {
+    initRole(defaultRole, server); // Créé tout les rôles par défaut
 
-        server.roles.create({
-                name: roleData.name,
-                color: roleData.color,
-                mentionable: true,
-                managed: false,
-        })
-            .then( (r) => {
-                console.log(`Le rôle ${r.name} a été créé dans le serveur ${server.name}.`);
-            })
-            .catch(console.error);
-    });
 });
 
 Client.on('messageCreate', async (message) => {
@@ -129,6 +119,17 @@ Client.on('messageCreate', async (message) => {
         });
 
     }
+
+    /**
+     *  Commands
+     */
+
+    if (!message.content.startsWith('/') || message.author.bot) return;
+
+    if (message.content === '/ResetRoleValorant'){
+        command.execute(defaultRole, message.guild, message);
+    }
+
 
 })
 
