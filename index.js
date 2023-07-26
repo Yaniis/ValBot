@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const axios = require('axios');
 const { GatewayIntentBits } = require('discord.js');
-const config = require('./config.json');
+const dotenv = require('dotenv');
+dotenv.config();
 const { initRole } = require('./functions');
 const command = require('./commands');
 
@@ -71,7 +72,7 @@ Client.on('messageCreate', async (message) => {
         correctValue = false;
     }
 
-    if (correctValue ){
+    if ( correctValue ){
 
         let username = message.content.split("#")[0];
         let tag = message.content.split("#")[1];
@@ -139,4 +140,4 @@ Client.on('messageCreate', async (message) => {
 
 })
 
-Client.login(config.token);
+Client.login(process.env.TOKEN);
